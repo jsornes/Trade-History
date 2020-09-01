@@ -18,6 +18,7 @@
 const fs = require("fs");
 const readline = require("readline");
 const { google } = require("googleapis");
+const base64url = require("base64url");
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"];
@@ -30,7 +31,7 @@ const TOKEN_PATH = "token.json";
 fs.readFile("credentials.json", (err, content) => {
   if (err) return console.log("Error loading client secret file:", err);
   // Authorize a client with credentials, then call the Gmail API.
-  authorize(JSON.parse(content), listLabels);
+  authorize(JSON.parse(content), listMessages);
 });
 
 /**
@@ -111,9 +112,76 @@ function listLabels(auth) {
     }
   );
 }
+/**
+ * Lists the messages in the user's account.
+ *
+ * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
+ */
+function listMessages(auth) {
+  console.log("fuck you");
+
+  let listi = [
+    "17444cc9a39354d0",
+    "17443f41a7bf93bf",
+    "174434b8d0a12fff",
+    "17442c4a27e68572",
+    "1744074e6d3bb2e8",
+  ];
+
+  const gmail = google.gmail({ version: "v1", auth });
+  messagesObj = "gmail.users.messages;";
+  gmail.users.messages.list(
+    {
+      userId: "me",
+      maxResults: 5,
+    },
+    (err, res) => {
+      if (err) return console.log("The API returned an error: " + err);
+      const messages = res.data.messages;
+      //console.log(messages);
+
+      if (messages.length) {
+        console.log("Messages:");
+        messages.forEach((message) => {
+          listi.push(message.id);
+          console.log(`- ${message.id}`);
+        });
+      } else {
+        console.log("No messages found.");
+      }
+      //console.log(listi);
+    }
+  );
+
+  console.log(listi);
+  listi.forEach((messageID) => {
+    params = { userId: "me", id: messageID, format: "RAW" };
+    messageToRead = gmail.users.messages.get(params, (err, res) => {
+      if (err) return console.log("The API returned an error: " + err);
+      const message = res.data;
+      const raw = res.data;
+      console.log(base64url.decode(raw.raw));
+      //console.log(res.data);
+      //console.log("hola");
+      //message.forEach((header) => {
+      // if (header.name == "Subject") {
+      //  console.log(header.value);
+      //}
+      //});
+      //if (message[0].body) {
+      // console.log(message[0].body);
+      //console.log(JSON.parse(message[0].body));
+      //}
+      //console.log(message);
+    });
+  });
+
+  console.log("fuck me");
+}
 // [END gmail_quickstart]
 
 module.exports = {
   SCOPES,
   listLabels,
+  listMessages,
 };

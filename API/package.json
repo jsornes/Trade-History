@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "dependencies": {
+    "base64url": "^3.0.1",
     "googleapis": "^39.2.0"
   },
   "devDependencies": {},
