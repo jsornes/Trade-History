@@ -14,7 +14,7 @@ The goal is to simply show some data in a pretty way, which gets updated either 
 
 You will need a `credentials.json` file with the project's information, according to Google's API (still need to search if you commit that file or not.) Having that file you can just start the API, follow the link in the terminal and allow access to your E-Mail (readOnly access.)
 
-##### TODOs:
+#### TODOs:
 
 -API needs to search for the broker's mails.
 -API needs to take the info and pack it into a JSON file.
