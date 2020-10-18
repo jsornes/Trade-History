@@ -120,47 +120,138 @@ function listLabels(auth) {
 function listMessages(auth) {
   console.log("fuck you");
 
-  let listi = [
-    "17444cc9a39354d0",
-    "17443f41a7bf93bf",
-    "174434b8d0a12fff",
-    "17442c4a27e68572",
-    "1744074e6d3bb2e8",
-  ];
+  let messageIds = [];
 
   const gmail = google.gmail({ version: "v1", auth });
   messagesObj = "gmail.users.messages;";
   gmail.users.messages.list(
     {
       userId: "me",
-      maxResults: 5,
+      maxResults: 10,
     },
     (err, res) => {
       if (err) return console.log("The API returned an error: " + err);
       const messages = res.data.messages;
-      //console.log(messages);
+      console.log("messages", messages);
 
       if (messages.length) {
-        console.log("Messages:");
+        //console.log("Messages:");
         messages.forEach((message) => {
-          listi.push(message.id);
-          console.log(`- ${message.id}`);
+          messageIds.push(message.id);
+          //console.log("ids: ", messageIds);
+          console.log(`id- ${message.id}`);
+          getOneMessageContent(message.id);
         });
       } else {
         console.log("No messages found.");
       }
-      //console.log(listi);
     }
   );
 
-  console.log(listi);
+  function getMethods(obj) {
+    var res = [];
+    for (var m in obj) {
+      if (typeof obj[m] == "function") {
+        res.push(m);
+      }
+    }
+    return res;
+  }
+  let listi = ["17444cc9a39354d0", "1744074e6d3bb2e8"];
+
+  /*
+      "17443f41a7bf93bf",
+    "174434b8d0a12fff",
+    "17442c4a27e68572",
+  */
+
+  //console.log(messageIds);
+
+  function getOneMessageContent(messageId) {
+    console.log(messageId);
+    params = { userId: "me", id: messageId };
+    messageToRead = gmail.users.messages.get(params, (err, res) => {
+      console.log("hello there");
+      if (err) {
+        return console.log("The API returned an error: " + err);
+      }
+      //console.log(res);
+      if (res) {
+        const messagePayload = res.data.payload;
+        //console.log("message: ", messagePayload.parts[0].body.size);
+        //console.log("res.payload: ", res);
+        if (
+          messagePayload.body.size > 0 &&
+          res.data.payload.mimeType === "text/plain"
+        ) {
+          console.log("message: ");
+          //console.log(base64url.decode(messagePayload.body.data));
+          console.log("payload.size: ", messagePayload.size);
+        } else if (
+          messagePayload.parts[0].body.size > 0 &&
+          res.data.payload.mimeType === "multipart/alternative"
+        ) {
+          messagePayload.parts.forEach((part) => {
+            console.log(base64url.decode(part.body.data));
+          });
+        }
+      } /*
+      console.log("res: ", res);
+      console.log("res.config", res.config.params);
+      console.log(
+        "payload",
+        base64url.decode(res.data.payload.parts[1].body.data)
+      );*/
+    });
+  }
+
+  function getMessageContent(messageIds) {
+    messageIds.forEach((messageId) => {
+      params = { userId: "me", id: messageId };
+      messageToRead = gmail.users.messages.get(params, (err, res) => {
+        console.log("hello there");
+        if (err) {
+          return console.log("The API returned an error: " + err);
+        }
+        console.log(res);
+        if (res) {
+          const message = res.data.payload.body.body;
+          console.log("message: ", base64url.decode(message));
+        }
+      });
+    });
+  }
+
+  //console.log(listi);
+  /*let i = 0;
   listi.forEach((messageID) => {
-    params = { userId: "me", id: messageID, format: "RAW" };
+    params = { userId: "me", id: messageID };
     messageToRead = gmail.users.messages.get(params, (err, res) => {
       if (err) return console.log("The API returned an error: " + err);
-      const message = res.data;
+      const message = res.data.payload.body;
+      let arr = [];
+      arr[i] = res.data;
       const raw = res.data;
-      console.log(base64url.decode(raw.raw));
+      //console.log("raw.raw" + base64url.decode(arr[0].raw));
+      console.log("jina");*/
+  /*
+      const message = res.data.payload.body.data;
+
+      for (method in massage) {
+        console.log(method);
+      }
+      console.log("massage: " + base64url.decode(message.data));
+      console.log("yane");*/
+  /*
+      const massage = arr[0].payload.body;
+
+      for (method in massage) {
+        console.log(method);
+      }
+      console.log("massage: " + base64url.decode(message.data));
+      console.log("yane");
+      //"arr[0]".getOwnPropertyNames;
+      i++;
       //console.log(res.data);
       //console.log("hola");
       //message.forEach((header) => {
@@ -174,7 +265,7 @@ function listMessages(auth) {
       //}
       //console.log(message);
     });
-  });
+  });*/
 
   console.log("fuck me");
 }

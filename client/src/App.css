@@ -6,17 +6,12 @@
   display: flex;
 }
 
-.App > * {
-  flex: 1 100%;
-}
-
 .header {
   height: 10vh;
 }
 
 .body {
   min-height: 85vh;
-  flex: 1 0 auto;
 }
 
 .footer {

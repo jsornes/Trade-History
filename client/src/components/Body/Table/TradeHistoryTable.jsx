@@ -4,8 +4,8 @@ import { DataGrid } from "@material-ui/data-grid";
 
 const columns = [
   { field: "orderId", headerName: "Order Id", width: 110 },
-  { field: "stock", headerName: "Instrument/ISIN", width: 150 },
-  { field: "direction", headerName: "Direction", width: 110 },
+  { field: "stock", headerName: "Instrument", width: 130 },
+  { field: "direction", headerName: "Direction", width: 130 },
   {
     field: "orderType",
     headerName: "Order type",
@@ -16,7 +16,7 @@ const columns = [
     field: "quantity",
     headerName: "Quantity",
     type: "number",
-    width: 110,
+    width: 120,
   },
   /* {
     field: 'fullName',
@@ -34,35 +34,36 @@ const columns = [
     width: 90,
   },
   {
-    field: "totalAmount",
-    headerName: "Total amount",
+    field: "openingTime",
+    headerName: "Opening time",
+    type: "datetime-local",
+    sortable: true,
+    width: 140,
+  },
+  {
+    field: "closingTime",
+    headerName: "Closing time",
+    type: "datetime-local",
+    sortable: true,
+    width: 150,
+  },
+  {
+    field: "closedBy",
+    headerName: "Closed by",
+    width: 130,
+  },
+  {
+    field: "closingPrice",
+    headerName: "Closing price",
     type: "number",
     width: 140,
   },
   {
-    field: "date",
-    headerName: "Date",
-    type: "date",
-    width: 70,
-  },
-  {
-    field: "time",
-    headerName: "Time",
-    type: "time",
-    width: 70,
-  },
-  {
-    field: "commission",
-    headerName: "Commission",
+    field: "result",
+    headerName: "Result",
     type: "number",
-    width: 140,
-  },
-  {
-    field: "fees",
-    headerName: "Fees",
-    type: "number",
-    width: 90,
-  },
+    width: 110,
+  } /*
   {
     field: "executionVenue",
     headerName: "Execution venue",
@@ -91,7 +92,7 @@ const columns = [
     headerName: "Portafolio size",
     type: "number",
     width: 150,
-  },
+  },*/,
 ];
 /*
 const rows = [
@@ -111,7 +112,7 @@ const rows = [];
 const TradeHistoryTable = () => {
   return (
     <div style={{ height: 400, width: "100%" }}>
-      <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection />
+      <DataGrid rows={rows} columns={columns} pageSize={5} />
     </div>
   );
 };
